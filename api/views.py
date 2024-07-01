@@ -5,12 +5,13 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 import os
+from .backends import get_client_ip
 
 class HelloView(View):
     @method_decorator(csrf_exempt)
     def get(self, request):
         visitor_name = request.GET.get('visitor_name', 'Guest')
-        client_ip = request.META.get('REMOTE_ADDR')
+        client_ip = get_client_ip(request)
         
         # Get location data from IP address
         location_response = requests.get(f'http://ip-api.com/json/{client_ip}')
